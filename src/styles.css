@@ -477,6 +477,10 @@ h3 {
   width: fit-content;
 }
 
+.instagram-button {
+  gap: 10px;
+}
+
 .join-card {
   padding: 30px;
   border: 1px solid var(--line);
