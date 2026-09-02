@@ -1,4 +1,8 @@
 node_modules/
 dist/
+.next/
+out/
+AGENTS.md
+CLAUDE.md
 .DS_Store
 *.log
