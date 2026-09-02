@@ -6,11 +6,12 @@ The admin content editor is Sanity Studio. It is kept separate from the public N
 
 1. Create a project at [sanity.io/manage](https://www.sanity.io/manage).
 2. Choose the `production` dataset.
-3. Copy the project ID into a local `.env.local` file:
+3. Copy the project ID into a local `.env.local` file. The project ID is available in the Sanity project settings:
 
 ```env
 NEXT_PUBLIC_SANITY_PROJECT_ID=your-project-id
 NEXT_PUBLIC_SANITY_DATASET=production
+SANITY_STUDIO_PROJECT_ID=your-project-id
 ```
 
 4. Sign in with `npx sanity login`.
