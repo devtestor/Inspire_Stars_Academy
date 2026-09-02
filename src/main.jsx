@@ -124,7 +124,9 @@ function Hero() {
       <div className="hero-shade" />
       <div className="hero-content">
         <p className="eyebrow">Kigali, Rwanda</p>
-        <h1>Inspire Stars Academy Rwanda</h1>
+        <h1>
+          Inspire Stars <span className="heading-blue">Academy</span>
+        </h1>
         <p className="hero-copy">
           Where young players grow through football training, discipline, education, values, teamwork, and global exposure.
         </p>
@@ -155,7 +157,9 @@ function Programs() {
       <div className="section-inner">
         <div className="section-heading">
           <p className="eyebrow dark">Training focus</p>
-          <h2>Complete development, on and off the pitch.</h2>
+          <h2>
+            Complete <span className="heading-blue">Player</span> Development
+          </h2>
         </div>
         <div className="program-grid">
           {programs.map((program, index) => (
@@ -179,7 +183,9 @@ function Pathway() {
       </div>
       <div className="feature-copy">
         <p className="eyebrow">Player pathway</p>
-        <h2>Local training with an international outlook.</h2>
+        <h2>
+          Local Training. <span className="heading-blue">Global Pathway.</span>
+        </h2>
         <p>
           The academy has created pathways for young footballers to travel for exposure and scouting in Europe, including
           Germany and France. That pathway begins with daily habits in Kigali: punctual training, coachability, fitness,
@@ -204,7 +210,9 @@ function Values() {
       <div className="section-inner values-grid">
         <div className="value-intro">
           <p className="eyebrow dark">Academy values</p>
-          <h2>The standard is bigger than talent.</h2>
+          <h2>
+            Standards Over <span className="heading-blue">Talent</span>
+          </h2>
         </div>
         <div className="value-list">
           {values.map((value) => (
@@ -225,7 +233,9 @@ function Gallery() {
       <div className="section-inner">
         <div className="section-heading compact">
           <p className="eyebrow">Moments</p>
-          <h2>Training, recognition, travel, and team pride.</h2>
+          <h2>
+            Academy <span className="heading-blue">Moments</span>
+          </h2>
         </div>
         <div className="photo-grid">
           {gallery.map((photo) => (
@@ -242,7 +252,9 @@ function Join() {
     <section className="join-section" id="join">
       <div className="join-content">
         <p className="eyebrow dark">Join the academy</p>
-        <h2>Ready to train with purpose?</h2>
+        <h2>
+          Train With <span className="heading-blue">Purpose</span>
+        </h2>
         <p>
           Families, young players, partners, and scouts can connect with Inspire Stars Academy Rwanda through Instagram
           for registration questions, training updates, and program information.
@@ -287,7 +299,9 @@ function App() {
           <div className="section-inner intro-grid">
             <div>
               <p className="eyebrow dark">About the academy</p>
-              <h2>Building confident players and grounded young people.</h2>
+              <h2>
+                Confident Players. <span className="heading-blue">Grounded People.</span>
+              </h2>
             </div>
             <p>
               Inspire Stars Academy Rwanda is a football development community based in Kigali. The academy brings

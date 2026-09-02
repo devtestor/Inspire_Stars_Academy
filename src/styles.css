@@ -206,6 +206,16 @@ h1 {
   text-transform: uppercase;
 }
 
+.heading-blue {
+  color: var(--blue);
+}
+
+.hero .heading-blue,
+.feature-section .heading-blue,
+.gallery-section .heading-blue {
+  color: #52a0ff;
+}
+
 h2 {
   margin-bottom: 18px;
   font-family: var(--display-font);
