@@ -15,6 +15,7 @@ import {
 } from "@/content/siteContent";
 import SplitHeading from "./SplitHeading";
 import SportsCarousel from "./SportsCarousel";
+import { fetchGalleryImages, fetchNewsPosts } from "@/lib/sanity";
 
 export function Hero() {
   return (
@@ -246,7 +247,11 @@ export function Sponsorship() {
   );
 }
 
-export function PartnersNewsInstagram() {
+export async function PartnersNewsInstagram() {
+  const [cmsPosts, galleryImages] = await Promise.all([fetchNewsPosts(), fetchGalleryImages()]);
+  const displayedNews = cmsPosts.length ? cmsPosts.slice(0, 3) : newsCards.map(([title, body, image]) => ({ title, excerpt: body, category: title, image, alt: `${title} at Inspire Stars Academy` }));
+  const displayedGallery = galleryImages.length ? galleryImages : [images.football, images.trophy, images.award, images.certificate, images.hero, images.school].map((image) => ({ image, alt: "Inspire Stars Academy social media moment" }));
+
   return (
     <section className="editorial" id="news">
       <SplitHeading eyebrow="Partners & Stories" title="Development" accent="Network" dark />
@@ -260,12 +265,12 @@ export function PartnersNewsInstagram() {
         ))}
       </div>
       <div className="news-grid">
-        {newsCards.map(([title, body, image]) => (
-          <article className="news-card" key={title} data-reveal>
-            <img src={image} alt={`${title} at Inspire Stars Academy`} loading="lazy" />
+        {displayedNews.map((post) => (
+          <article className="news-card" key={post._id || post.title} data-reveal>
+            <img src={post.image} alt={post.alt || `${post.title} at Inspire Stars Academy`} loading="lazy" />
             <div>
-              <p>{title}</p>
-              <h3>{body}</h3>
+              <p>{post.category}</p>
+              <h3>{post.excerpt}</h3>
             </div>
           </article>
         ))}
@@ -278,8 +283,8 @@ export function PartnersNewsInstagram() {
           </h2>
         </div>
         <div className="insta-grid" aria-label="Instagram-style academy photo grid">
-          {[images.football, images.trophy, images.award, images.certificate, images.hero, images.school].map((photo) => (
-            <img src={photo} alt="Inspire Stars Academy social media moment" loading="lazy" key={photo} />
+          {displayedGallery.map((photo, index) => (
+            <img src={photo.image} alt={photo.alt || photo.title || "Inspire Stars Academy social media moment"} loading="lazy" key={photo._id || `${photo.image}-${index}`} />
           ))}
         </div>
         <a className="btn primary" href={site.instagram} target="_blank" rel="noreferrer">
