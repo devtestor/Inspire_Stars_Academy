@@ -17,6 +17,7 @@
     "next": "latest",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
-    "sanity": "latest"
+    "sanity": "latest",
+    "styled-components": "^6.5.3"
   }
 }

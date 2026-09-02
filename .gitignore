@@ -4,5 +4,6 @@ dist/
 out/
 AGENTS.md
 CLAUDE.md
+.sanity/
 .DS_Store
 *.log
