@@ -2,6 +2,8 @@ import React from "react";
 import { createRoot } from "react-dom/client";
 import {
   ArrowRight,
+  ChevronLeft,
+  ChevronRight,
   Building2,
   Download,
   ExternalLink,
@@ -289,10 +291,32 @@ function Timeline() {
 }
 
 function Sports() {
+  const carouselRef = React.useRef(null);
+
+  const slide = (direction) => {
+    const carousel = carouselRef.current;
+    if (!carousel) return;
+
+    carousel.scrollBy({
+      left: direction * carousel.clientWidth * 0.82,
+      behavior: "smooth",
+    });
+  };
+
   return (
     <section className="sports" id="sports">
-      <SplitHeading eyebrow="Sports Ecosystem" title="More Than" accent="A Game" />
-      <div className="sports-strip" aria-label="Sports offered by Inspire Stars Academy">
+      <div className="sports-header">
+        <SplitHeading eyebrow="Sports Ecosystem" title="More Than" accent="A Game" />
+        <div className="carousel-controls" aria-label="Sports carousel controls">
+          <button type="button" onClick={() => slide(-1)} aria-label="Show previous sports">
+            <ChevronLeft size={22} />
+          </button>
+          <button type="button" onClick={() => slide(1)} aria-label="Show next sports">
+            <ChevronRight size={22} />
+          </button>
+        </div>
+      </div>
+      <div className="sports-strip" ref={carouselRef} aria-label="Sports offered by Inspire Stars Academy">
         {sports.map(([name, image, body]) => (
           <article className="sport-card" key={name} data-reveal>
             <img src={image} alt={`${name} development at Inspire Stars Academy`} loading="lazy" />

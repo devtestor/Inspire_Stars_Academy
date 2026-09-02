@@ -526,6 +526,43 @@ h3 {
   color: var(--white);
 }
 
+.sports-header {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 38px;
+}
+
+.sports-header .section-heading {
+  margin-bottom: 0;
+}
+
+.carousel-controls {
+  display: inline-flex;
+  gap: 10px;
+  padding-bottom: 8px;
+}
+
+.carousel-controls button {
+  display: inline-grid;
+  width: 48px;
+  height: 48px;
+  place-items: center;
+  border: 1px solid var(--line-dark);
+  border-radius: 4px;
+  color: var(--white);
+  background: rgba(255, 255, 255, 0.08);
+  cursor: pointer;
+  transition: background 180ms ease, border-color 180ms ease, transform 180ms ease;
+}
+
+.carousel-controls button:hover {
+  border-color: var(--gold);
+  background: rgba(216, 170, 82, 0.18);
+  transform: translateY(-2px);
+}
+
 .sports-strip,
 .athlete-strip {
   display: grid;
@@ -535,7 +572,15 @@ h3 {
   overflow-x: auto;
   overscroll-behavior-inline: contain;
   padding-bottom: 12px;
-  scrollbar-width: thin;
+  scroll-behavior: smooth;
+  scroll-padding-inline: clamp(18px, 5vw, 72px);
+  scroll-snap-type: inline mandatory;
+  scrollbar-width: none;
+}
+
+.sports-strip::-webkit-scrollbar,
+.athlete-strip::-webkit-scrollbar {
+  display: none;
 }
 
 .sport-card {
@@ -545,6 +590,7 @@ h3 {
   border: 1px solid var(--line-dark);
   border-radius: 4px;
   background: var(--carbon);
+  scroll-snap-align: start;
 }
 
 .sport-card img,
@@ -1181,6 +1227,16 @@ h3 {
   .sports-strip,
   .athlete-strip {
     grid-auto-columns: minmax(285px, 86vw);
+  }
+
+  .sports-header {
+    display: grid;
+    gap: 18px;
+  }
+
+  .carousel-controls {
+    justify-self: start;
+    padding-bottom: 0;
   }
 
   .sport-card {
