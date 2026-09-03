@@ -127,26 +127,13 @@ export function Impact() {
 export function Timeline() {
   return (
     <section className="journey">
-      <div className="journey-intro" data-reveal>
-        <div>
-          <SplitHeading eyebrow="The Inspire Stars Story" title="The" accent="Journey" dark />
-          <p className="journey-lead">
-            From foundation to international pathway, each step widened opportunity for young athletes.
-          </p>
-        </div>
-      </div>
-      <div className="timeline-flow" data-reveal>
-        <div className="timeline-rail" aria-hidden="true" />
-        {timeline.map((item, index) => (
-          <article className="timeline-card" key={item.year}>
-            <div className="timeline-marker" aria-hidden="true">
-              <span>{`0${index + 1}`}</span>
-            </div>
-            <div className="timeline-body">
-              <span>{item.year}</span>
-              <h3>{item.title}</h3>
-              <p>{item.body}</p>
-            </div>
+      <SplitHeading eyebrow="The Inspire Stars Story" title="The" accent="Journey" dark />
+      <div className="timeline">
+        {timeline.map((item) => (
+          <article className="timeline-card" key={item.year} data-reveal>
+            <span>{item.year}</span>
+            <h3>{item.title}</h3>
+            <p>{item.body}</p>
           </article>
         ))}
       </div>
