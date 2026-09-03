@@ -604,8 +604,20 @@ h1 span {
 }
 
 .journey {
+  position: relative;
   background: var(--white);
   color: var(--obsidian);
+  overflow: hidden;
+}
+
+.journey::before {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 10% 16%, rgba(216, 170, 82, 0.1), transparent 24%),
+    radial-gradient(circle at 88% 12%, rgba(216, 170, 82, 0.08), transparent 18%);
+  pointer-events: none;
+  content: "";
 }
 
 .section-heading {
@@ -613,25 +625,121 @@ h1 span {
   margin-bottom: 38px;
 }
 
-.timeline {
+.journey-intro {
+  position: relative;
+  z-index: 1;
   display: grid;
-  grid-template-columns: repeat(5, minmax(190px, 1fr));
-  border-top: 1px solid var(--line-light);
+  grid-template-columns: minmax(0, 1.1fr) minmax(280px, 0.7fr);
+  gap: clamp(24px, 4vw, 56px);
+  align-items: end;
+  margin-bottom: 42px;
+}
+
+.journey-lead {
+  max-width: 58ch;
+  margin: 0;
+  color: var(--ink-muted);
+  font-size: clamp(1rem, 1.35vw, 1.14rem);
+}
+
+.journey-note {
+  display: grid;
+  gap: 10px;
+  padding: 22px 24px;
+  border: 1px solid rgba(185, 137, 56, 0.16);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(250, 246, 238, 0.92));
+  box-shadow: 0 18px 38px rgba(8, 16, 32, 0.06);
+}
+
+.journey-note span {
+  color: var(--gold-deep);
+  font-size: 0.72rem;
+  font-weight: 900;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.journey-note strong {
+  color: var(--obsidian);
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+.timeline-flow {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  gap: 22px;
+}
+
+.timeline-rail {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 36px;
+  width: 2px;
+  background: linear-gradient(180deg, rgba(216, 170, 82, 0.22), rgba(185, 137, 56, 0.5), rgba(216, 170, 82, 0.12));
 }
 
 .timeline-card {
-  min-height: 330px;
-  padding: 28px 22px;
-  border-right: 1px solid var(--line-light);
+  position: relative;
+  display: grid;
+  grid-template-columns: 96px minmax(0, 240px) minmax(0, 1fr);
+  gap: 22px;
+  align-items: center;
 }
 
-.timeline-card:first-child {
-  border-left: 1px solid var(--line-light);
+.timeline-card::before {
+  position: absolute;
+  top: 50%;
+  left: 28px;
+  width: 18px;
+  height: 18px;
+  border: 4px solid var(--white);
+  border-radius: 50%;
+  background: var(--gold-deep);
+  box-shadow: 0 0 0 6px rgba(216, 170, 82, 0.14);
+  content: "";
+  transform: translateY(-50%);
 }
 
-.timeline-card span {
+.timeline-card.is-offset {
+  grid-template-columns: 96px minmax(0, 1fr) minmax(0, 240px);
+}
+
+.timeline-card.is-offset .timeline-media {
+  order: 3;
+}
+
+.timeline-card.is-offset .timeline-body {
+  order: 2;
+}
+
+.timeline-media {
+  min-height: 220px;
+  overflow: hidden;
+  border: 1px solid rgba(185, 137, 56, 0.14);
+  background: var(--soft-white);
+  box-shadow: 0 18px 40px rgba(8, 16, 32, 0.08);
+}
+
+.timeline-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.timeline-body {
+  display: grid;
+  gap: 10px;
+  padding: 28px;
+  border: 1px solid rgba(185, 137, 56, 0.14);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(250, 246, 238, 0.92));
+  box-shadow: 0 18px 38px rgba(8, 16, 32, 0.06);
+}
+
+.timeline-body span {
   display: block;
-  margin-bottom: 96px;
   color: var(--gold-deep);
   font-family: var(--display);
   font-size: clamp(2.35rem, 4vw, 4rem);
@@ -2540,6 +2648,7 @@ h3 {
 
   .impact,
   .impact-intro,
+  .journey-intro,
   .pathway,
   .case-study,
   .league,
@@ -2550,10 +2659,6 @@ h3 {
   .footer,
   .form-shell {
     grid-template-columns: 1fr;
-  }
-
-  .timeline {
-    overflow-x: auto;
   }
 
   .impact-highlights,
@@ -2568,8 +2673,18 @@ h3 {
     grid-template-columns: 1fr;
   }
 
-  .timeline-card {
-    min-width: 260px;
+  .timeline-card,
+  .timeline-card.is-offset {
+    grid-template-columns: 80px minmax(0, 1fr);
+  }
+
+  .timeline-card.is-offset .timeline-media,
+  .timeline-card.is-offset .timeline-body {
+    order: initial;
+  }
+
+  .timeline-media {
+    min-height: 200px;
   }
 
   .pillar-grid {
@@ -2668,6 +2783,27 @@ h3 {
   .sports-strip,
   .athlete-strip {
     grid-auto-columns: minmax(285px, 86vw);
+  }
+
+  .timeline-card,
+  .timeline-card.is-offset {
+    grid-template-columns: 52px minmax(0, 1fr);
+    gap: 16px;
+  }
+
+  .timeline-card::before {
+    left: 17px;
+    width: 14px;
+    height: 14px;
+    border-width: 3px;
+  }
+
+  .timeline-rail {
+    left: 23px;
+  }
+
+  .timeline-body {
+    padding: 22px;
   }
 
   .sports-header {
