@@ -11,7 +11,7 @@ export const metadata = {
 export default function ContactPage() {
   return (
     <main>
-      <PageHero eyebrow="Contact" title="Your Journey" accent="Starts Here" body="For parents, athletes, schools, sponsors and international partners ready to speak with the academy." image={images.hero} />
+      <PageHero eyebrow="Contact" title="Your Journey" accent="Starts Here" body="For parents, athletes, schools, sponsors and international partners ready to speak with the academy." image={images.hero} imageAlt="Inspire Stars Academy international exposure background" />
       <section className="form-shell">
         <div data-reveal>
           <p className="eyebrow dark">Contact the Academy</p>

@@ -1,6 +1,4 @@
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
-import RevealProvider from "@/components/RevealProvider";
+import AppShell from "@/components/AppShell";
 import { site } from "@/content/siteContent";
 import "./globals.css";
 
@@ -57,11 +55,7 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <body>
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }} />
-        <RevealProvider>
-          <Navbar />
-          {children}
-          <Footer />
-        </RevealProvider>
+        <AppShell>{children}</AppShell>
       </body>
     </html>
   );

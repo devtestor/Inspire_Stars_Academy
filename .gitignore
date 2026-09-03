@@ -7,3 +7,5 @@ CLAUDE.md
 .sanity/
 .DS_Store
 *.log
+.vercel
+.env*

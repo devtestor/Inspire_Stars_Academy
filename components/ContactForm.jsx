@@ -25,22 +25,27 @@ export default function ContactForm({ defaultIntent = "Join the Academy" }) {
     setStatus("loading");
     setNotice("");
 
-    const response = await fetch("/api/contact", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(form),
-    });
-    const result = await response.json();
+    try {
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form),
+      });
+      const result = await response.json();
 
-    if (!response.ok) {
+      if (!response.ok) {
+        setStatus("error");
+        setNotice(result.error || "Please check the form and try again.");
+        return;
+      }
+
+      setStatus("success");
+      setNotice("Message received. The academy team can follow up from here.");
+      setForm({ ...initialState, intent: defaultIntent });
+    } catch {
       setStatus("error");
-      setNotice(result.error || "Please check the form and try again.");
-      return;
+      setNotice("The contact service is temporarily unavailable.");
     }
-
-    setStatus("success");
-    setNotice("Message received. The academy team can follow up from here.");
-    setForm({ ...initialState, intent: defaultIntent });
   };
 
   return (

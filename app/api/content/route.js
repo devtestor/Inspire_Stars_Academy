@@ -13,8 +13,9 @@ import {
   sports,
   timeline,
 } from "@/content/siteContent";
+import { getPublishedGallery, getPublishedNews } from "@/lib/cms";
 
-export function GET() {
+export async function GET() {
   return Response.json({
     site,
     navItems,
@@ -29,5 +30,9 @@ export function GET() {
     partnerGroups,
     newsCards,
     programs,
+    cms: {
+      news: await getPublishedNews(),
+      gallery: await getPublishedGallery(),
+    },
   });
 }

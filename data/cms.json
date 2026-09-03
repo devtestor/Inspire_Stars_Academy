@@ -1,0 +1,90 @@
+{
+  "news": [
+    {
+      "id": "academy-news",
+      "slug": "academy-news",
+      "title": "Academy News",
+      "category": "Academy Update",
+      "excerpt": "Training updates, academy growth and development milestones from Kigali.",
+      "body": "Follow the latest academy milestones, training environments and multi-sport development activity from Inspire Stars Academy Rwanda.",
+      "image": "/assets/optimized/isar-young-football-team.webp",
+      "alt": "Inspire Stars Academy football session",
+      "publishedAt": "2026-09-01T08:00:00.000Z",
+      "featured": true
+    },
+    {
+      "id": "gasabo-private-school-league",
+      "slug": "gasabo-private-school-league",
+      "title": "Gasabo Private School League",
+      "category": "Competition",
+      "excerpt": "Nine private schools and more than 500 students came together through structured youth competition.",
+      "body": "The league was designed to build teamwork, leadership, sportsmanship and talent identification through football, basketball and swimming.",
+      "image": "/assets/optimized/isar-trophy-team.webp",
+      "alt": "Inspire Stars Academy trophy celebration",
+      "publishedAt": "2026-08-28T08:00:00.000Z",
+      "featured": false
+    },
+    {
+      "id": "international-opportunities",
+      "slug": "international-opportunities",
+      "title": "International Opportunities",
+      "category": "Global Pathway",
+      "excerpt": "Pathway activity continues across France, Germany, the United Kingdom and China.",
+      "body": "Inspire Stars Academy keeps building development routes that connect local talent with international education, training and scholarship opportunities.",
+      "image": "/assets/optimized/isar-global-exposure.webp",
+      "alt": "Inspire Stars Academy international travel moment",
+      "publishedAt": "2026-08-22T08:00:00.000Z",
+      "featured": false
+    }
+  ],
+  "gallery": [
+    {
+      "id": "gallery-football",
+      "title": "Football Development",
+      "caption": "Training and team-building sessions.",
+      "image": "/assets/optimized/isar-young-football-team.webp",
+      "alt": "Football training at Inspire Stars Academy",
+      "publishedAt": "2026-09-01T08:00:00.000Z"
+    },
+    {
+      "id": "gallery-trophy",
+      "title": "Competition Moments",
+      "caption": "Team success and recognition.",
+      "image": "/assets/optimized/isar-trophy-team.webp",
+      "alt": "Team trophy celebration at Inspire Stars Academy",
+      "publishedAt": "2026-08-29T08:00:00.000Z"
+    },
+    {
+      "id": "gallery-award",
+      "title": "Recognition",
+      "caption": "Athlete award and development highlights.",
+      "image": "/assets/optimized/isar-award-moment.webp",
+      "alt": "Award moment at Inspire Stars Academy",
+      "publishedAt": "2026-08-25T08:00:00.000Z"
+    },
+    {
+      "id": "gallery-certificate",
+      "title": "Certification",
+      "caption": "Progress and recognition through development programs.",
+      "image": "/assets/optimized/isar-certificate-award.webp",
+      "alt": "Certificate ceremony at Inspire Stars Academy",
+      "publishedAt": "2026-08-23T08:00:00.000Z"
+    },
+    {
+      "id": "gallery-global",
+      "title": "Global Exposure",
+      "caption": "Travel and international opportunity.",
+      "image": "/assets/optimized/isar-global-exposure.webp",
+      "alt": "International exposure trip at Inspire Stars Academy",
+      "publishedAt": "2026-08-20T08:00:00.000Z"
+    },
+    {
+      "id": "gallery-school",
+      "title": "School Partnership",
+      "caption": "Student-athlete development environments.",
+      "image": "/assets/optimized/isar-school-session.webp",
+      "alt": "School session with Inspire Stars Academy",
+      "publishedAt": "2026-08-18T08:00:00.000Z"
+    }
+  ]
+}

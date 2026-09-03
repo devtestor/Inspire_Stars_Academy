@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { ArrowRight, Building2, Download, Instagram, MapPin, Play, Shield } from "lucide-react";
 import {
+  academyHighlights,
   athleteStories,
   centers,
   countries,
@@ -15,7 +16,7 @@ import {
 } from "@/content/siteContent";
 import SplitHeading from "./SplitHeading";
 import SportsCarousel from "./SportsCarousel";
-import { fetchGalleryImages, fetchNewsPosts } from "@/lib/sanity";
+import { getPublishedGallery, getPublishedNews } from "@/lib/cms";
 
 export function Hero() {
   return (
@@ -58,6 +59,14 @@ export function Impact() {
             <strong>{stat.value}</strong>
             <span>{stat.label}</span>
           </div>
+        ))}
+      </div>
+      <div className="impact-highlights">
+        {academyHighlights.map(([title, body]) => (
+          <article key={title} data-reveal>
+            <h3>{title}</h3>
+            <p>{body}</p>
+          </article>
         ))}
       </div>
     </section>
@@ -248,7 +257,7 @@ export function Sponsorship() {
 }
 
 export async function PartnersNewsInstagram() {
-  const [cmsPosts, galleryImages] = await Promise.all([fetchNewsPosts(), fetchGalleryImages()]);
+  const [cmsPosts, galleryImages] = await Promise.all([getPublishedNews(), getPublishedGallery()]);
   const displayedNews = cmsPosts.length ? cmsPosts.slice(0, 3) : newsCards.map(([title, body, image]) => ({ title, excerpt: body, category: title, image, alt: `${title} at Inspire Stars Academy` }));
   const displayedGallery = galleryImages.length ? galleryImages : [images.football, images.trophy, images.award, images.certificate, images.hero, images.school].map((image) => ({ image, alt: "Inspire Stars Academy social media moment" }));
 
@@ -270,7 +279,8 @@ export async function PartnersNewsInstagram() {
             <img src={post.image} alt={post.alt || `${post.title} at Inspire Stars Academy`} loading="lazy" />
             <div>
               <p>{post.category}</p>
-              <h3>{post.excerpt}</h3>
+              <h3>{post.title}</h3>
+              <span>{post.excerpt}</span>
             </div>
           </article>
         ))}

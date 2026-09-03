@@ -15,6 +15,8 @@ import {
   TrainingCenters,
 } from "@/components/HomeSections";
 
+export const revalidate = 60;
+
 export default function HomePage() {
   return (
     <main>

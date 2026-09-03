@@ -2,10 +2,12 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { ExternalLink, Instagram, Menu, X } from "lucide-react";
 import { images, navItems, site } from "@/content/siteContent";
 
 export default function Navbar() {
+  const pathname = usePathname();
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
@@ -26,7 +28,7 @@ export default function Navbar() {
       </Link>
       <nav className="desktop-nav" aria-label="Main navigation">
         {navItems.map(([label, href]) => (
-          <Link key={href} href={href}>
+          <Link key={href} href={href} aria-current={pathname === href ? "page" : undefined}>
             {label}
           </Link>
         ))}
@@ -45,7 +47,7 @@ export default function Navbar() {
       <div className="mobile-menu" aria-hidden={!open}>
         <div className="mobile-menu-inner">
           {navItems.map(([label, href]) => (
-            <Link key={href} href={href} onClick={close}>
+            <Link key={href} href={href} onClick={close} aria-current={pathname === href ? "page" : undefined}>
               {label}
             </Link>
           ))}

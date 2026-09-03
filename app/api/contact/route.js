@@ -20,18 +20,22 @@ export async function POST(request) {
     return Response.json({ error: "Please provide your name, a valid email and a clear message." }, { status: 422 });
   }
 
-  if (process.env.CONTACT_WEBHOOK_URL) {
-    const response = await fetch(process.env.CONTACT_WEBHOOK_URL, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload),
-    });
+  try {
+    if (process.env.CONTACT_WEBHOOK_URL) {
+      const response = await fetch(process.env.CONTACT_WEBHOOK_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
 
-    if (!response.ok) {
-      return Response.json({ error: "The message service is temporarily unavailable." }, { status: 502 });
+      if (!response.ok) {
+        return Response.json({ error: "The message service is temporarily unavailable." }, { status: 502 });
+      }
+    } else {
+      console.info("ISAR contact submission", payload);
     }
-  } else {
-    console.info("ISAR contact submission", payload);
+  } catch {
+    return Response.json({ error: "The message service is temporarily unavailable." }, { status: 502 });
   }
 
   return Response.json({ ok: true });

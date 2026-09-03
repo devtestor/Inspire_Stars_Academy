@@ -1,28 +1,47 @@
-# Inspire Stars Academy CMS
+# ISAR Dashboard Setup
 
-The admin content editor is Sanity Studio. It is kept separate from the public Next.js bundle so the website stays fast.
+The website now uses a first-party admin dashboard instead of Sanity.
 
-## Create the Sanity project
+## Environment variables
 
-1. Create a project at [sanity.io/manage](https://www.sanity.io/manage).
-2. Choose the `production` dataset.
-3. Copy the project ID into a local `.env.local` file. The project ID is available in the Sanity project settings:
+Add these values to `.env.local` for local development and to your hosting provider for production:
 
 ```env
-NEXT_PUBLIC_SANITY_PROJECT_ID=your-project-id
-NEXT_PUBLIC_SANITY_DATASET=production
-SANITY_STUDIO_PROJECT_ID=your-project-id
+ADMIN_USERNAME=admin
+ADMIN_PASSWORD=change-this
+ADMIN_SESSION_SECRET=replace-with-a-long-random-string
+BLOB_READ_WRITE_TOKEN=
+CONTACT_WEBHOOK_URL=
 ```
 
-4. Sign in with `npx sanity login`.
-5. Start the editor with `npm run studio`.
-6. Publish the Studio with `npm run studio:deploy` when it is ready for staff use.
+## Start the app
 
-The public News page automatically displays published Sanity posts. Until the environment variables are configured, it continues showing the built-in academy stories.
+```bash
+npm install
+npm run dev
+```
 
-## Available content
+The public site runs through the main Next.js app. The admin dashboard is available at `/admin/login`.
 
-- `News post`: title, category, excerpt, rich-text story, cover image, alt text, publish date and homepage feature flag.
-- `Gallery image`: image, alt text, caption and publish date.
+## Dashboard behavior
 
-Add the same `NEXT_PUBLIC_SANITY_PROJECT_ID` and `NEXT_PUBLIC_SANITY_DATASET` values to Vercel under Project Settings > Environment Variables, then redeploy the website.
+- News stories and gallery images are stored in `data/cms.json`
+- Uploaded images are written to `public/uploads/admin/`
+- Content updates revalidate `/`, `/news`, and `/partners`
+
+## Durable production storage
+
+For Vercel deployments, connect a Vercel Blob store to the project. Vercel's Blob docs state that connected projects receive `BLOB_STORE_ID` and `VERCEL_OIDC_TOKEN` automatically, and local development works after `vercel env pull`. This app also supports `BLOB_READ_WRITE_TOKEN` as a manual fallback.
+
+When Blob is connected:
+
+- CMS content is stored in `isar/cms/content.json`
+- Uploaded images are stored under `isar/uploads/`
+- The dashboard automatically switches from local disk to Blob-backed storage
+
+## Local fallback
+
+If Blob is not configured, the app falls back to local files:
+
+- Content: `data/cms.json`
+- Uploads: `public/uploads/admin/`

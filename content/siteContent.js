@@ -39,6 +39,46 @@ export const impactStats = [
   { value: "5 yr", label: "International education partnerships" },
 ];
 
+export const academyHighlights = [
+  ["Professional Coaching", "Structured sessions build technical confidence, habits and consistency across multiple sports."],
+  ["Education & Mentorship", "Athlete progress is tied to discipline, guidance and life beyond competition."],
+  ["Inclusive Access", "Programs are built to widen opportunity for children across different backgrounds and abilities."],
+];
+
+export const academyPathways = [
+  ["Foundation Path", "Entry-level development for children beginning structured sport training."],
+  ["School Partnership Path", "Programs delivered with schools to create competition, coaching and talent visibility."],
+  ["Elite Exposure Path", "Advanced environments for athletes progressing toward high-performance and international opportunity."],
+  ["Support Ecosystem", "Family engagement, mentorship and welfare support around the athlete journey."],
+];
+
+export const sportsFramework = [
+  ["Technical Foundation", "Skill repetition, movement quality and sport-specific confidence."],
+  ["Competitive Readiness", "Match awareness, pressure habits and tournament preparation."],
+  ["Physical Development", "Conditioning, coordination, discipline and healthy athletic routines."],
+  ["Character Growth", "Respect, accountability, resilience and team values built into training."],
+];
+
+export const athletePrinciples = [
+  ["Scouting Lens", "Profiles are presented around progression, pathway quality and development readiness."],
+  ["Opportunity Mindset", "The academy connects local performance with scholarship, training and exposure pathways."],
+  ["Documented Progress", "Only verified academy outcomes and supported route examples are presented publicly."],
+];
+
+export const programBlueprint = [
+  ["Parents & Athletes", "Registration, onboarding and clear development pathways into academy programs."],
+  ["Schools", "Coaching, leagues, talent identification and school-linked athlete support."],
+  ["Elite Hubs", "Advanced sessions at Zaria Court and Amahoro Stadium under the VIPERS Center program."],
+  ["Sponsors & Partners", "Structured ways to support access, events, visibility and youth development outcomes."],
+];
+
+export const partnerModes = [
+  ["School Partnership", "Program delivery, leagues and student-athlete development support."],
+  ["International Collaboration", "Training, scholarship and pathway opportunities connected to talent development."],
+  ["Sponsorship", "Brand visibility, event activation and measurable community impact through youth sport."],
+  ["Community Support", "Families, mentors and local institutions strengthening the athlete ecosystem."],
+];
+
 export const timeline = [
   { year: "2018", title: "Foundation", body: "Sports development programs established under Coach Rodrigue Nzeye's leadership." },
   { year: "2019", title: "Inclusion", body: "Expanded support for children from disadvantaged backgrounds and widened access to training." },
