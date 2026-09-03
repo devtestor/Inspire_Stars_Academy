@@ -131,12 +131,8 @@ export function Timeline() {
         <div>
           <SplitHeading eyebrow="The Inspire Stars Story" title="The" accent="Journey" dark />
           <p className="journey-lead">
-            Inspire Stars Academy has grown step by step: from a local sports development initiative into a wider ecosystem built around access, discipline, schools and international opportunity.
+            From foundation to international pathway, each step widened opportunity for young athletes.
           </p>
-        </div>
-        <div className="journey-note">
-          <span>Storyline</span>
-          <strong>Each stage widened the pathway for young athletes in Kigali and beyond.</strong>
         </div>
       </div>
       <div className="timeline-flow" data-reveal>
