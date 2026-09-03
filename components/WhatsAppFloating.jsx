@@ -1,8 +1,21 @@
 "use client";
 
-import { MessageCircleMore } from "lucide-react";
-
 const whatsappUrl = "https://wa.me/250789921727";
+
+function WhatsAppLogo() {
+  return (
+    <svg viewBox="0 0 32 32" aria-hidden="true" focusable="false">
+      <path
+        fill="currentColor"
+        d="M27.2 4.8A14.92 14.92 0 0 0 16.6 1C8.33 1 1.6 7.7 1.6 15.97c0 2.65.69 5.24 2 7.53L1 31l7.72-2.52a15.4 15.4 0 0 0 7.34 1.87h.01c8.27 0 14.97-6.73 14.97-15 0-4-1.56-7.75-4.4-10.55Zm-11.13 23c-2.26 0-4.47-.61-6.4-1.77l-.46-.27-4.58 1.5 1.5-4.46-.3-.47A12.37 12.37 0 0 1 3.7 16C3.7 9 9.35 3.36 16.3 3.36c3.37 0 6.54 1.31 8.92 3.69a12.5 12.5 0 0 1 3.71 8.9c0 6.95-5.69 11.84-12.86 11.84Z"
+      />
+      <path
+        fill="currentColor"
+        d="M23.43 19.28c-.4-.2-2.35-1.16-2.72-1.3-.36-.13-.63-.2-.9.2-.26.4-1.03 1.29-1.26 1.56-.23.26-.46.3-.86.1-.4-.2-1.67-.61-3.18-1.94-1.17-1.04-1.97-2.33-2.2-2.73-.23-.4-.03-.62.17-.82.18-.18.4-.46.6-.7.2-.23.26-.4.4-.66.14-.26.07-.5-.03-.7-.1-.2-.9-2.16-1.24-2.95-.33-.8-.66-.68-.9-.69h-.76c-.27 0-.7.1-1.07.5-.36.4-1.4 1.37-1.4 3.35 0 1.97 1.44 3.88 1.63 4.15.2.26 2.83 4.32 6.86 6.06.96.42 1.72.67 2.3.86.97.3 1.84.26 2.53.16.77-.12 2.35-.96 2.69-1.88.33-.93.33-1.72.23-1.88-.1-.17-.36-.27-.76-.47Z"
+      />
+    </svg>
+  );
+}
 
 export default function WhatsAppFloating() {
   return (
@@ -13,7 +26,9 @@ export default function WhatsAppFloating() {
       rel="noreferrer"
       aria-label="Chat with Inspire Stars Academy on WhatsApp"
     >
-      <MessageCircleMore size={22} />
+      <span className="whatsapp-mark">
+        <WhatsAppLogo />
+      </span>
       <span>WhatsApp</span>
     </a>
   );
