@@ -4,6 +4,7 @@ import { usePathname } from "next/navigation";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import RevealProvider from "@/components/RevealProvider";
+import WhatsAppFloating from "@/components/WhatsAppFloating";
 
 export default function AppShell({ children }) {
   const pathname = usePathname();
@@ -12,6 +13,7 @@ export default function AppShell({ children }) {
   return (
     <RevealProvider>
       {!isAdminRoute && <Navbar />}
+      {!isAdminRoute && <WhatsAppFloating />}
       {children}
       {!isAdminRoute && <Footer />}
     </RevealProvider>

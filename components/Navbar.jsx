@@ -59,7 +59,7 @@ export default function Navbar() {
         <a className="icon-link" href={siteSettings.instagram} target="_blank" rel="noreferrer" aria-label="Open Instagram">
           <Instagram size={19} />
         </a>
-        <Link className="nav-cta" href="/contact">
+        <Link className="nav-cta" href="/join">
           {siteSettings.joinCtaLabel || "Join the Academy"}
         </Link>
         <button className="menu-button" type="button" aria-label={open ? "Close menu" : "Open menu"} aria-expanded={open} onClick={() => setOpen((value) => !value)}>
@@ -76,7 +76,7 @@ export default function Navbar() {
           <a href={siteSettings.instagram} target="_blank" rel="noreferrer" onClick={close}>
             Instagram <ExternalLink size={18} />
           </a>
-          <Link className="mobile-cta" href="/contact" onClick={close}>
+          <Link className="mobile-cta" href="/join" onClick={close}>
             {siteSettings.joinCtaLabel || "Join the Academy"}
           </Link>
         </div>
