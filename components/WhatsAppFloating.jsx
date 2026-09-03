@@ -29,7 +29,6 @@ export default function WhatsAppFloating() {
       <span className="whatsapp-mark">
         <WhatsAppLogo />
       </span>
-      <span>WhatsApp</span>
     </a>
   );
 }
