@@ -74,11 +74,9 @@ export function Impact() {
             Through professional coaching, education, competition and mentorship, Inspire Stars Academy creates an environment where young people discover potential and prepare for opportunities beyond the field.
           </p>
           <div className="impact-seal">
-            <img src={images.school} alt="Inspire Stars Academy student athlete session" loading="lazy" />
-            <div>
-              <span>From potential to performance</span>
-              <strong>Kigali-based development with global ambition.</strong>
-            </div>
+            <span>From potential to performance</span>
+            <strong>Kigali-based development with global ambition.</strong>
+            <p>Every layer of the academy is designed to move young athletes from early promise into disciplined, visible and opportunity-ready performance.</p>
           </div>
         </div>
       </div>
