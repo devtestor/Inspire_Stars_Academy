@@ -125,8 +125,6 @@ export function Impact() {
 }
 
 export function Timeline() {
-  const timelineImages = [images.leadership, images.school, images.football, images.hero, images.trophy];
-
   return (
     <section className="journey">
       <div className="journey-intro" data-reveal>
@@ -141,12 +139,12 @@ export function Timeline() {
           <strong>Each stage widened the pathway for young athletes in Kigali and beyond.</strong>
         </div>
       </div>
-      <div className="timeline-flow">
+      <div className="timeline-flow" data-reveal>
         <div className="timeline-rail" aria-hidden="true" />
         {timeline.map((item, index) => (
-          <article className={`timeline-card ${index % 2 === 1 ? "is-offset" : ""}`} key={item.year} data-reveal>
-            <div className="timeline-media">
-              <img src={timelineImages[index % timelineImages.length]} alt={`${item.title} phase in the Inspire Stars Academy journey`} loading="lazy" />
+          <article className="timeline-card" key={item.year}>
+            <div className="timeline-marker" aria-hidden="true">
+              <span>{`0${index + 1}`}</span>
             </div>
             <div className="timeline-body">
               <span>{item.year}</span>
