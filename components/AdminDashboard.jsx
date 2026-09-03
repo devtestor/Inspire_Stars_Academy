@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { ArrowDown, ArrowUp, Clock3, ImagePlus, Images, LayoutDashboard, LogOut, Newspaper, Save, Search, Sparkles, Star, Trash2, UploadCloud } from "lucide-react";
+import { ArrowDown, ArrowUp, Clock3, Globe2, ImagePlus, Images, LayoutDashboard, LogOut, Megaphone, Newspaper, Save, Search, Settings2, Sparkles, Star, Trash2, UploadCloud } from "lucide-react";
 
 const blankNewsItem = {
   id: "",
@@ -28,6 +28,7 @@ const blankGalleryItem = {
 const tabs = [
   { key: "news", label: "News", icon: Newspaper },
   { key: "gallery", label: "Gallery", icon: Images },
+  { key: "site", label: "Site", icon: Settings2 },
 ];
 
 function createDraftItem(template) {
@@ -103,8 +104,22 @@ function getStatusCounts(items) {
   );
 }
 
+function getDefaultSettings() {
+  return {
+    site: {},
+    hero: {},
+    finalCta: {},
+    contact: { requestOptions: [] },
+  };
+}
+
+function getTabCount(tabKey, content) {
+  if (tabKey === "site") return 4;
+  return Array.isArray(content[tabKey]) ? content[tabKey].length : 0;
+}
+
 export default function AdminDashboard({ username }) {
-  const [content, setContent] = useState({ news: [], gallery: [], storageMode: "local" });
+  const [content, setContent] = useState({ news: [], gallery: [], settings: getDefaultSettings(), storageMode: "local" });
   const [loading, setLoading] = useState(true);
   const [loaded, setLoaded] = useState(false);
   const [saving, setSaving] = useState(false);
@@ -130,7 +145,10 @@ export default function AdminDashboard({ username }) {
           return;
         }
 
-        setContent(result);
+        setContent({
+          ...result,
+          settings: result.settings || getDefaultSettings(),
+        });
       } catch {
         setError("Unable to load dashboard content.");
         setLoading(false);
@@ -154,9 +172,11 @@ export default function AdminDashboard({ username }) {
     return () => window.clearTimeout(timeoutId);
   }, [content, dirty, loaded]);
 
-  const collection = content[activeTab];
-  const selectedIndex = Math.min(selected[activeTab], Math.max(collection.length - 1, 0));
+  const isSettingsTab = activeTab === "site";
+  const collection = Array.isArray(content[activeTab]) ? content[activeTab] : [];
+  const selectedIndex = Math.min(selected[activeTab] || 0, Math.max(collection.length - 1, 0));
   const selectedItem = collection[selectedIndex] || null;
+  const settings = content.settings || getDefaultSettings();
   const storyCount = content.news.length;
   const galleryCount = content.gallery.length;
   const featuredCount = content.news.filter((item) => item.featured).length;
@@ -193,6 +213,30 @@ export default function AdminDashboard({ username }) {
     });
     setDirty(true);
     setNotice("");
+  };
+
+  const updateSettingsField = (section, field, value) => {
+    setContent((current) => ({
+      ...current,
+      settings: {
+        ...current.settings,
+        [section]: {
+          ...current.settings?.[section],
+          [field]: value,
+        },
+      },
+    }));
+    setDirty(true);
+    setNotice("");
+  };
+
+  const updateRequestOptions = (value) => {
+    const options = String(value || "")
+      .split("\n")
+      .map((item) => item.trim())
+      .filter(Boolean);
+
+    updateSettingsField("contact", "requestOptions", options);
   };
 
   const addCollectionItem = (collectionKey, template) => {
@@ -278,26 +322,21 @@ export default function AdminDashboard({ username }) {
       return false;
     }
 
-    setContent(result);
+    setContent({
+      ...result,
+      settings: result.settings || getDefaultSettings(),
+    });
     setSaving(false);
     setDirty(false);
     setLastSavedAt(new Date().toISOString());
-
-    if (!silent) {
-      setNotice("All content changes are live.");
-    } else {
-      setNotice("Autosaved.");
-    }
+    setNotice(silent ? "Autosaved." : "All content changes are live.");
 
     return true;
   };
 
   const saveAll = async () => {
     setNotice("");
-    const ok = await saveContent(content, false);
-    if (!ok) {
-      return;
-    }
+    await saveContent(content, false);
   };
 
   const signOut = async () => {
@@ -332,7 +371,7 @@ export default function AdminDashboard({ username }) {
             <p className="eyebrow">Private Dashboard</p>
             <h1>Editorial Control Center</h1>
             <p className="admin-copy">
-              Manage the academy story, gallery moments and public-facing content with a cleaner publishing workflow. Signed in as {username}.
+              Manage academy stories, gallery moments, and the public-facing brand system from one publishing workspace. Signed in as {username}.
             </p>
             <div className="admin-state-row">
               <span className={`status-pill ${storyStatus.live ? "live" : "draft"}`}>{storyStatus.live} live stories</span>
@@ -392,8 +431,8 @@ export default function AdminDashboard({ username }) {
                 <strong>{galleryStatus.live} live / {galleryStatus.scheduled} scheduled / {galleryStatus.draft} draft</strong>
               </div>
               <div>
-                <span>Featured stories</span>
-                <strong>{featuredCount} selected for priority coverage</strong>
+                <span>Site control</span>
+                <strong>Hero, CTA, contact and brand details are now managed from one settings workspace.</strong>
               </div>
             </div>
           </article>
@@ -401,22 +440,22 @@ export default function AdminDashboard({ username }) {
           <article className="overview-panel">
             <div className="dashboard-card-head">
               <div>
-                <p className="eyebrow dark">Selection</p>
-                <h2>{selectedItem?.title || "No item selected"}</h2>
+                <p className="eyebrow dark">{isSettingsTab ? "Site Settings" : "Selection"}</p>
+                <h2>{isSettingsTab ? "Brand & Conversion Controls" : selectedItem?.title || "No item selected"}</h2>
               </div>
             </div>
             <div className="signal-list">
               <div>
                 <span>Status</span>
-                <strong>{selectedItem ? getItemState(selectedItem).label : "Waiting"}</strong>
+                <strong>{isSettingsTab ? "Manual publishing control" : selectedItem ? getItemState(selectedItem).label : "Waiting"}</strong>
               </div>
               <div>
                 <span>Publish window</span>
-                <strong>{selectedItem ? formatDateTime(selectedItem.publishedAt) : "Select an item"}</strong>
+                <strong>{isSettingsTab ? "Updates publish with the next save" : selectedItem ? formatDateTime(selectedItem.publishedAt) : "Select an item"}</strong>
               </div>
               <div>
                 <span>Destination</span>
-                <strong>{activeTab === "news" ? "News page and public API" : "Gallery section and public API"}</strong>
+                <strong>{activeTab === "news" ? "News page and public API" : activeTab === "gallery" ? "Gallery section and public API" : "Hero, contact page, footer and navigation"}</strong>
               </div>
             </div>
           </article>
@@ -445,242 +484,425 @@ export default function AdminDashboard({ username }) {
               >
                 <Icon size={18} />
                 <span>{tab.label}</span>
-                <strong>{content[tab.key].length}</strong>
+                <strong>{getTabCount(tab.key, content)}</strong>
               </button>
             );
           })}
         </div>
 
-        <div className="admin-workspace">
-          <aside className="admin-sidebar">
-            <div className="sidebar-header">
-              <div>
-                <p className="eyebrow dark">{activeTab === "news" ? "News Feed" : "Visual Library"}</p>
-                <h2>{activeTab === "news" ? "Content Queue" : "Gallery Queue"}</h2>
+        {isSettingsTab ? (
+          <div className="admin-site-grid">
+            <section className="editor-panel site-panel">
+              <div className="editor-header">
+                <div>
+                  <p className="eyebrow dark">Site Settings</p>
+                  <h2>Brand & Contact</h2>
+                </div>
               </div>
-              <button
-                className="btn secondary sidebar-add"
-                type="button"
-                onClick={() => addCollectionItem(activeTab, activeTab === "news" ? blankNewsItem : blankGalleryItem)}
-              >
-                {activeTab === "news" ? <Newspaper size={18} /> : <ImagePlus size={18} />}
-                {activeTab === "news" ? "Add Story" : "Add Image"}
-              </button>
-            </div>
+              <div className="dashboard-fields">
+                <label className="field">
+                  <span>Academy name</span>
+                  <input value={settings.site.name || ""} onChange={(event) => updateSettingsField("site", "name", event.target.value)} />
+                </label>
+                <label className="field">
+                  <span>Short name</span>
+                  <input value={settings.site.shortName || ""} onChange={(event) => updateSettingsField("site", "shortName", event.target.value)} />
+                </label>
+                <label className="field field-wide">
+                  <span>Tagline</span>
+                  <input value={settings.site.tagline || ""} onChange={(event) => updateSettingsField("site", "tagline", event.target.value)} />
+                </label>
+                <label className="field">
+                  <span>Phone</span>
+                  <input value={settings.site.phone || ""} onChange={(event) => updateSettingsField("site", "phone", event.target.value)} />
+                </label>
+                <label className="field">
+                  <span>Email</span>
+                  <input value={settings.site.email || ""} onChange={(event) => updateSettingsField("site", "email", event.target.value)} />
+                </label>
+                <label className="field">
+                  <span>Instagram URL</span>
+                  <input value={settings.site.instagram || ""} onChange={(event) => updateSettingsField("site", "instagram", event.target.value)} />
+                </label>
+                <label className="field">
+                  <span>YouTube URL</span>
+                  <input value={settings.site.youtube || ""} onChange={(event) => updateSettingsField("site", "youtube", event.target.value)} />
+                </label>
+                <label className="field">
+                  <span>Website label</span>
+                  <input value={settings.site.websiteLabel || ""} onChange={(event) => updateSettingsField("site", "websiteLabel", event.target.value)} />
+                </label>
+                <label className="field">
+                  <span>Navbar CTA label</span>
+                  <input value={settings.site.joinCtaLabel || ""} onChange={(event) => updateSettingsField("site", "joinCtaLabel", event.target.value)} />
+                </label>
+              </div>
+            </section>
 
-            <div className="sidebar-toolbar">
-              <label className="toolbar-search">
-                <Search size={16} />
-                <input value={query} onChange={(event) => setQuery(event.target.value)} placeholder={`Search ${activeTab}...`} />
-              </label>
-              <label className="toolbar-filter">
-                <span>Status</span>
-                <select value={statusFilter} onChange={(event) => setStatusFilter(event.target.value)}>
-                  <option value="all">All</option>
-                  <option value="live">Live</option>
-                  <option value="scheduled">Scheduled</option>
-                  <option value="draft">Draft</option>
-                </select>
-              </label>
-            </div>
+            <section className="editor-panel site-panel">
+              <div className="editor-header">
+                <div>
+                  <p className="eyebrow dark">Hero</p>
+                  <h2>Homepage Opening</h2>
+                </div>
+                <Globe2 size={18} />
+              </div>
+              <div className="dashboard-fields">
+                <label className="field">
+                  <span>Location label</span>
+                  <input value={settings.hero.locationLabel || ""} onChange={(event) => updateSettingsField("hero", "locationLabel", event.target.value)} />
+                </label>
+                <label className="field">
+                  <span>Title line 1</span>
+                  <input value={settings.hero.titleLineOne || ""} onChange={(event) => updateSettingsField("hero", "titleLineOne", event.target.value)} />
+                </label>
+                <label className="field">
+                  <span>Title line 2</span>
+                  <input value={settings.hero.titleLineTwo || ""} onChange={(event) => updateSettingsField("hero", "titleLineTwo", event.target.value)} />
+                </label>
+                <label className="field">
+                  <span>Accent line</span>
+                  <input value={settings.hero.accentLine || ""} onChange={(event) => updateSettingsField("hero", "accentLine", event.target.value)} />
+                </label>
+                <label className="field">
+                  <span>Title line 3</span>
+                  <input value={settings.hero.titleLineThree || ""} onChange={(event) => updateSettingsField("hero", "titleLineThree", event.target.value)} />
+                </label>
+                <label className="field field-wide">
+                  <span>Hero body</span>
+                  <textarea rows={4} value={settings.hero.body || ""} onChange={(event) => updateSettingsField("hero", "body", event.target.value)} />
+                </label>
+                <label className="field">
+                  <span>Primary CTA label</span>
+                  <input value={settings.hero.primaryCtaLabel || ""} onChange={(event) => updateSettingsField("hero", "primaryCtaLabel", event.target.value)} />
+                </label>
+                <label className="field">
+                  <span>Primary CTA href</span>
+                  <input value={settings.hero.primaryCtaHref || ""} onChange={(event) => updateSettingsField("hero", "primaryCtaHref", event.target.value)} />
+                </label>
+                <label className="field">
+                  <span>Secondary CTA label</span>
+                  <input value={settings.hero.secondaryCtaLabel || ""} onChange={(event) => updateSettingsField("hero", "secondaryCtaLabel", event.target.value)} />
+                </label>
+                <label className="field">
+                  <span>Secondary CTA href</span>
+                  <input value={settings.hero.secondaryCtaHref || ""} onChange={(event) => updateSettingsField("hero", "secondaryCtaHref", event.target.value)} />
+                </label>
+              </div>
+            </section>
 
-            <div className="sidebar-list">
-              {filteredCollection.map(({ item, index }) => {
-                const state = getItemState(item);
-                return (
+            <section className="editor-panel site-panel">
+              <div className="editor-header">
+                <div>
+                  <p className="eyebrow dark">Final CTA</p>
+                  <h2>Conversion Section</h2>
+                </div>
+                <Megaphone size={18} />
+              </div>
+              <div className="dashboard-fields">
+                <label className="field">
+                  <span>Eyebrow</span>
+                  <input value={settings.finalCta.eyebrow || ""} onChange={(event) => updateSettingsField("finalCta", "eyebrow", event.target.value)} />
+                </label>
+                <label className="field">
+                  <span>Title</span>
+                  <input value={settings.finalCta.title || ""} onChange={(event) => updateSettingsField("finalCta", "title", event.target.value)} />
+                </label>
+                <label className="field">
+                  <span>Accent</span>
+                  <input value={settings.finalCta.accent || ""} onChange={(event) => updateSettingsField("finalCta", "accent", event.target.value)} />
+                </label>
+                <label className="field field-wide">
+                  <span>Body</span>
+                  <textarea rows={4} value={settings.finalCta.body || ""} onChange={(event) => updateSettingsField("finalCta", "body", event.target.value)} />
+                </label>
+                <label className="field">
+                  <span>Primary label</span>
+                  <input value={settings.finalCta.primaryLabel || ""} onChange={(event) => updateSettingsField("finalCta", "primaryLabel", event.target.value)} />
+                </label>
+                <label className="field">
+                  <span>Primary href</span>
+                  <input value={settings.finalCta.primaryHref || ""} onChange={(event) => updateSettingsField("finalCta", "primaryHref", event.target.value)} />
+                </label>
+                <label className="field">
+                  <span>Secondary label</span>
+                  <input value={settings.finalCta.secondaryLabel || ""} onChange={(event) => updateSettingsField("finalCta", "secondaryLabel", event.target.value)} />
+                </label>
+                <label className="field">
+                  <span>Secondary href</span>
+                  <input value={settings.finalCta.secondaryHref || ""} onChange={(event) => updateSettingsField("finalCta", "secondaryHref", event.target.value)} />
+                </label>
+                <label className="field">
+                  <span>Tertiary label</span>
+                  <input value={settings.finalCta.tertiaryLabel || ""} onChange={(event) => updateSettingsField("finalCta", "tertiaryLabel", event.target.value)} />
+                </label>
+                <label className="field">
+                  <span>Tertiary href</span>
+                  <input value={settings.finalCta.tertiaryHref || ""} onChange={(event) => updateSettingsField("finalCta", "tertiaryHref", event.target.value)} />
+                </label>
+              </div>
+            </section>
+
+            <section className="editor-panel site-panel">
+              <div className="editor-header">
+                <div>
+                  <p className="eyebrow dark">Contact Form</p>
+                  <h2>Inbound Requests</h2>
+                </div>
+              </div>
+              <div className="dashboard-fields">
+                <label className="field">
+                  <span>Section eyebrow</span>
+                  <input value={settings.contact.eyebrow || ""} onChange={(event) => updateSettingsField("contact", "eyebrow", event.target.value)} />
+                </label>
+                <label className="field field-wide">
+                  <span>Section title</span>
+                  <input value={settings.contact.title || ""} onChange={(event) => updateSettingsField("contact", "title", event.target.value)} />
+                </label>
+                <label className="field field-wide">
+                  <span>Section body</span>
+                  <textarea rows={4} value={settings.contact.body || ""} onChange={(event) => updateSettingsField("contact", "body", event.target.value)} />
+                </label>
+                <label className="field field-wide">
+                  <span>Request options</span>
+                  <textarea rows={6} value={(settings.contact.requestOptions || []).join("\n")} onChange={(event) => updateRequestOptions(event.target.value)} />
+                  <small className="field-hint">One option per line. These populate the public contact form.</small>
+                </label>
+              </div>
+            </section>
+          </div>
+        ) : (
+          <div className="admin-workspace">
+            <aside className="admin-sidebar">
+              <div className="sidebar-header">
+                <div>
+                  <p className="eyebrow dark">{activeTab === "news" ? "News Feed" : "Visual Library"}</p>
+                  <h2>{activeTab === "news" ? "Content Queue" : "Gallery Queue"}</h2>
+                </div>
                 <button
-                  key={item.id || `${activeTab}-${index}`}
+                  className="btn secondary sidebar-add"
                   type="button"
-                  className={`sidebar-item ${index === selectedIndex ? "is-selected" : ""}`}
-                  onClick={() => setSelected((current) => ({ ...current, [activeTab]: index }))}
+                  onClick={() => addCollectionItem(activeTab, activeTab === "news" ? blankNewsItem : blankGalleryItem)}
                 >
-                  <div className="sidebar-thumb">
-                    {item.image ? <img src={item.image} alt={item.alt || item.title || "Preview"} /> : <Sparkles size={20} />}
-                  </div>
-                  <div className="sidebar-meta">
-                    <span>{activeTab === "news" ? item.category || "Story" : "Gallery image"}</span>
-                    <strong>{item.title || "Untitled item"}</strong>
-                    <p>{formatDate(item.publishedAt)}</p>
-                    <div className="sidebar-tags">
-                      <span className={`status-pill ${state.key}`}>{state.label}</span>
-                      {activeTab === "news" && item.featured && <span className="status-pill featured">Featured</span>}
-                    </div>
-                  </div>
+                  {activeTab === "news" ? <Newspaper size={18} /> : <ImagePlus size={18} />}
+                  {activeTab === "news" ? "Add Story" : "Add Image"}
                 </button>
-                );
-              })}
-              {!filteredCollection.length && (
-                <div className="sidebar-empty">
-                  <Sparkles size={18} />
-                  <p>No items match the current search or filter.</p>
-                </div>
-              )}
-            </div>
-          </aside>
+              </div>
 
-          <div className="editor-panel">
-            {selectedItem ? (
-              <>
-                <div className="editor-header">
-                  <div>
-                    <p className="eyebrow dark">{activeTab === "news" ? "Item Editor" : "Image Editor"}</p>
-                    <h2>{selectedItem.title || (activeTab === "news" ? "New Story" : "New Image")}</h2>
-                    <div className="editor-state-row">
-                      <span className={`status-pill ${getItemState(selectedItem).key}`}>{getItemState(selectedItem).label}</span>
-                      {activeTab === "news" && selectedItem.featured && <span className="status-pill featured">Featured</span>}
+              <div className="sidebar-toolbar">
+                <label className="toolbar-search">
+                  <Search size={16} />
+                  <input value={query} onChange={(event) => setQuery(event.target.value)} placeholder={`Search ${activeTab}...`} />
+                </label>
+                <label className="toolbar-filter">
+                  <span>Status</span>
+                  <select value={statusFilter} onChange={(event) => setStatusFilter(event.target.value)}>
+                    <option value="all">All</option>
+                    <option value="live">Live</option>
+                    <option value="scheduled">Scheduled</option>
+                    <option value="draft">Draft</option>
+                  </select>
+                </label>
+              </div>
+
+              <div className="sidebar-list">
+                {filteredCollection.map(({ item, index }) => {
+                  const state = getItemState(item);
+                  return (
+                    <button
+                      key={item.id || `${activeTab}-${index}`}
+                      type="button"
+                      className={`sidebar-item ${index === selectedIndex ? "is-selected" : ""}`}
+                      onClick={() => setSelected((current) => ({ ...current, [activeTab]: index }))}
+                    >
+                      <div className="sidebar-thumb">
+                        {item.image ? <img src={item.image} alt={item.alt || item.title || "Preview"} /> : <Sparkles size={20} />}
+                      </div>
+                      <div className="sidebar-meta">
+                        <span>{activeTab === "news" ? item.category || "Story" : "Gallery image"}</span>
+                        <strong>{item.title || "Untitled item"}</strong>
+                        <p>{formatDate(item.publishedAt)}</p>
+                        <div className="sidebar-tags">
+                          <span className={`status-pill ${state.key}`}>{state.label}</span>
+                          {activeTab === "news" && item.featured && <span className="status-pill featured">Featured</span>}
+                        </div>
+                      </div>
+                    </button>
+                  );
+                })}
+                {!filteredCollection.length && (
+                  <div className="sidebar-empty">
+                    <Sparkles size={18} />
+                    <p>No items match the current search or filter.</p>
+                  </div>
+                )}
+              </div>
+            </aside>
+
+            <div className="editor-panel">
+              {selectedItem ? (
+                <>
+                  <div className="editor-header">
+                    <div>
+                      <p className="eyebrow dark">{activeTab === "news" ? "Item Editor" : "Image Editor"}</p>
+                      <h2>{selectedItem.title || (activeTab === "news" ? "New Story" : "New Image")}</h2>
+                      <div className="editor-state-row">
+                        <span className={`status-pill ${getItemState(selectedItem).key}`}>{getItemState(selectedItem).label}</span>
+                        {activeTab === "news" && selectedItem.featured && <span className="status-pill featured">Featured</span>}
+                      </div>
+                    </div>
+                    <div className="editor-actions">
+                      <button type="button" className="icon-action" onClick={() => moveCollectionItem(activeTab, selectedIndex, -1)} aria-label="Move item up" disabled={selectedIndex === 0}>
+                        <ArrowUp size={16} />
+                      </button>
+                      <button type="button" className="icon-action" onClick={() => moveCollectionItem(activeTab, selectedIndex, 1)} aria-label="Move item down" disabled={selectedIndex === collection.length - 1}>
+                        <ArrowDown size={16} />
+                      </button>
+                      <button type="button" className="icon-action danger" onClick={() => removeCollectionItem(activeTab, selectedIndex)} aria-label="Delete current item">
+                        <Trash2 size={16} />
+                      </button>
                     </div>
                   </div>
-                  <div className="editor-actions">
-                    <button type="button" className="icon-action" onClick={() => moveCollectionItem(activeTab, selectedIndex, -1)} aria-label="Move item up" disabled={selectedIndex === 0}>
-                      <ArrowUp size={16} />
-                    </button>
-                    <button type="button" className="icon-action" onClick={() => moveCollectionItem(activeTab, selectedIndex, 1)} aria-label="Move item down" disabled={selectedIndex === collection.length - 1}>
-                      <ArrowDown size={16} />
-                    </button>
-                    <button type="button" className="icon-action danger" onClick={() => removeCollectionItem(activeTab, selectedIndex)} aria-label="Delete current item">
-                      <Trash2 size={16} />
-                    </button>
-                  </div>
-                </div>
 
-                <div className="editor-layout">
-                  <div className="editor-form">
-                    <section className="editor-section">
-                      <h3>Content Details</h3>
-                      <div className="dashboard-fields">
-                        <label className="field">
-                          <span>Title</span>
-                          <input value={selectedItem.title || ""} onChange={(event) => updateCollectionItem(activeTab, selectedIndex, "title", event.target.value)} />
-                        </label>
-                        {activeTab === "news" ? (
+                  <div className="editor-layout">
+                    <div className="editor-form">
+                      <section className="editor-section">
+                        <h3>Content Details</h3>
+                        <div className="dashboard-fields">
                           <label className="field">
-                            <span>Category</span>
-                            <input value={selectedItem.category || ""} onChange={(event) => updateCollectionItem(activeTab, selectedIndex, "category", event.target.value)} />
+                            <span>Title</span>
+                            <input value={selectedItem.title || ""} onChange={(event) => updateCollectionItem(activeTab, selectedIndex, "title", event.target.value)} />
                           </label>
-                        ) : (
-                          <label className="field">
-                            <span>Published</span>
-                            <input type="datetime-local" value={(selectedItem.publishedAt || "").slice(0, 16)} onChange={(event) => updateCollectionItem(activeTab, selectedIndex, "publishedAt", event.target.value)} />
-                          </label>
-                        )}
-                        {activeTab === "news" && (
-                          <>
+                          {activeTab === "news" ? (
+                            <label className="field">
+                              <span>Category</span>
+                              <input value={selectedItem.category || ""} onChange={(event) => updateCollectionItem(activeTab, selectedIndex, "category", event.target.value)} />
+                            </label>
+                          ) : (
                             <label className="field">
                               <span>Published</span>
                               <input type="datetime-local" value={(selectedItem.publishedAt || "").slice(0, 16)} onChange={(event) => updateCollectionItem(activeTab, selectedIndex, "publishedAt", event.target.value)} />
                             </label>
-                            <label className="field">
-                              <span>Slug</span>
-                              <input value={selectedItem.slug || ""} onChange={(event) => updateCollectionItem(activeTab, selectedIndex, "slug", createSlug(event.target.value))} />
-                              <small className="field-hint">Used for cleaner news URLs and internal organization.</small>
-                            </label>
-                          </>
-                        )}
-                        <label className="field field-wide">
-                          <span>{activeTab === "news" ? "Excerpt" : "Caption"}</span>
-                          <textarea
-                            rows={3}
-                            value={activeTab === "news" ? selectedItem.excerpt || "" : selectedItem.caption || ""}
-                            onChange={(event) => updateCollectionItem(activeTab, selectedIndex, activeTab === "news" ? "excerpt" : "caption", event.target.value)}
-                          />
-                        </label>
-                        {activeTab === "news" && (
+                          )}
+                          {activeTab === "news" && (
+                            <>
+                              <label className="field">
+                                <span>Published</span>
+                                <input type="datetime-local" value={(selectedItem.publishedAt || "").slice(0, 16)} onChange={(event) => updateCollectionItem(activeTab, selectedIndex, "publishedAt", event.target.value)} />
+                              </label>
+                              <label className="field">
+                                <span>Slug</span>
+                                <input value={selectedItem.slug || ""} onChange={(event) => updateCollectionItem(activeTab, selectedIndex, "slug", createSlug(event.target.value))} />
+                                <small className="field-hint">Used for cleaner news URLs and internal organization.</small>
+                              </label>
+                            </>
+                          )}
                           <label className="field field-wide">
-                            <span>Body</span>
-                            <textarea rows={6} value={selectedItem.body || ""} onChange={(event) => updateCollectionItem(activeTab, selectedIndex, "body", event.target.value)} />
+                            <span>{activeTab === "news" ? "Excerpt" : "Caption"}</span>
+                            <textarea
+                              rows={3}
+                              value={activeTab === "news" ? selectedItem.excerpt || "" : selectedItem.caption || ""}
+                              onChange={(event) => updateCollectionItem(activeTab, selectedIndex, activeTab === "news" ? "excerpt" : "caption", event.target.value)}
+                            />
                           </label>
-                        )}
-                      </div>
-                    </section>
+                          {activeTab === "news" && (
+                            <label className="field field-wide">
+                              <span>Body</span>
+                              <textarea rows={6} value={selectedItem.body || ""} onChange={(event) => updateCollectionItem(activeTab, selectedIndex, "body", event.target.value)} />
+                            </label>
+                          )}
+                        </div>
+                      </section>
 
-                    <section className="editor-section">
-                      <h3>Media</h3>
-                      <div className="dashboard-fields">
-                        <label className="field field-wide">
-                          <span>Image URL</span>
-                          <input value={selectedItem.image || ""} onChange={(event) => updateCollectionItem(activeTab, selectedIndex, "image", event.target.value)} />
-                          <small className="field-hint">Paste a public image URL or upload a new asset below.</small>
-                        </label>
-                        <label className="field">
-                          <span>Upload Image</span>
-                          <div className="upload-field">
-                            <UploadCloud size={18} />
-                            <input type="file" accept="image/*" onChange={(event) => event.target.files?.[0] && uploadImage(activeTab, selectedIndex, event.target.files[0])} />
-                            <small>{uploading === `${activeTab}-${selectedIndex}` ? "Uploading..." : "PNG, JPG, WEBP or AVIF"}</small>
-                          </div>
-                        </label>
-                        <label className="field">
-                          <span>Alt Text</span>
-                          <input value={selectedItem.alt || ""} onChange={(event) => updateCollectionItem(activeTab, selectedIndex, "alt", event.target.value)} />
-                        </label>
+                      <section className="editor-section">
+                        <h3>Media</h3>
+                        <div className="dashboard-fields">
+                          <label className="field field-wide">
+                            <span>Image URL</span>
+                            <input value={selectedItem.image || ""} onChange={(event) => updateCollectionItem(activeTab, selectedIndex, "image", event.target.value)} />
+                            <small className="field-hint">Paste a public image URL or upload a new asset below.</small>
+                          </label>
+                          <label className="field">
+                            <span>Upload Image</span>
+                            <div className="upload-field">
+                              <UploadCloud size={18} />
+                              <input type="file" accept="image/*" onChange={(event) => event.target.files?.[0] && uploadImage(activeTab, selectedIndex, event.target.files[0])} />
+                              <small>{uploading === `${activeTab}-${selectedIndex}` ? "Uploading..." : "PNG, JPG, WEBP or AVIF"}</small>
+                            </div>
+                          </label>
+                          <label className="field">
+                            <span>Alt Text</span>
+                            <input value={selectedItem.alt || ""} onChange={(event) => updateCollectionItem(activeTab, selectedIndex, "alt", event.target.value)} />
+                          </label>
+                          {activeTab === "news" && (
+                            <label className="field checkbox-field field-wide">
+                              <input type="checkbox" checked={Boolean(selectedItem.featured)} onChange={(event) => updateCollectionItem(activeTab, selectedIndex, "featured", event.target.checked)} />
+                              <span>Feature this story on the news page</span>
+                            </label>
+                          )}
+                        </div>
+                      </section>
+                    </div>
+
+                    <aside className="editor-preview">
+                      <div className="preview-card">
+                        <span className="preview-label">{activeTab === "news" ? "Live Card Preview" : "Gallery Preview"}</span>
+                        <div className="preview-media">
+                          {selectedItem.image ? <img src={selectedItem.image} alt={selectedItem.alt || selectedItem.title || "Preview"} /> : <Sparkles size={26} />}
+                        </div>
+                        <div className="preview-copy">
+                          <p>{activeTab === "news" ? selectedItem.category || "Story" : "Gallery Image"}</p>
+                          <h3>{selectedItem.title || (activeTab === "news" ? "Untitled story" : "Untitled image")}</h3>
+                          <span>{activeTab === "news" ? selectedItem.excerpt || "Add an excerpt to preview the public card." : selectedItem.caption || "Add a caption to preview the gallery item."}</span>
+                        </div>
+                      </div>
+
+                      <div className="preview-meta">
+                        <div>
+                          <span>Status</span>
+                          <strong>{getItemState(selectedItem).label}</strong>
+                        </div>
+                        <div>
+                          <span>Date</span>
+                          <strong>{formatDate(selectedItem.publishedAt)}</strong>
+                        </div>
                         {activeTab === "news" && (
-                          <label className="field checkbox-field field-wide">
-                            <input type="checkbox" checked={Boolean(selectedItem.featured)} onChange={(event) => updateCollectionItem(activeTab, selectedIndex, "featured", event.target.checked)} />
-                            <span>Feature this story on the news page</span>
-                          </label>
+                          <div>
+                            <span>Featured</span>
+                            <strong>{selectedItem.featured ? "Yes" : "No"}</strong>
+                          </div>
+                        )}
+                        <div>
+                          <span>Alt Text</span>
+                          <strong>{selectedItem.alt || "Not set"}</strong>
+                        </div>
+                        {activeTab === "news" && (
+                          <div>
+                            <span>Slug</span>
+                            <strong>{selectedItem.slug || "Auto-generated from title"}</strong>
+                          </div>
                         )}
                       </div>
-                    </section>
+                    </aside>
                   </div>
-
-                  <aside className="editor-preview">
-                    <div className="preview-card">
-                      <span className="preview-label">{activeTab === "news" ? "Live Card Preview" : "Gallery Preview"}</span>
-                      <div className="preview-media">
-                        {selectedItem.image ? <img src={selectedItem.image} alt={selectedItem.alt || selectedItem.title || "Preview"} /> : <Sparkles size={26} />}
-                      </div>
-                      <div className="preview-copy">
-                        <p>{activeTab === "news" ? selectedItem.category || "Story" : "Gallery Image"}</p>
-                        <h3>{selectedItem.title || (activeTab === "news" ? "Untitled story" : "Untitled image")}</h3>
-                        <span>{activeTab === "news" ? selectedItem.excerpt || "Add an excerpt to preview the public card." : selectedItem.caption || "Add a caption to preview the gallery item."}</span>
-                      </div>
-                    </div>
-
-                    <div className="preview-meta">
-                      <div>
-                        <span>Status</span>
-                        <strong>{getItemState(selectedItem).label}</strong>
-                      </div>
-                      <div>
-                        <span>Date</span>
-                        <strong>{formatDate(selectedItem.publishedAt)}</strong>
-                      </div>
-                      {activeTab === "news" && (
-                        <div>
-                          <span>Featured</span>
-                          <strong>{selectedItem.featured ? "Yes" : "No"}</strong>
-                        </div>
-                      )}
-                      <div>
-                        <span>Alt Text</span>
-                        <strong>{selectedItem.alt || "Not set"}</strong>
-                      </div>
-                      {activeTab === "news" && (
-                        <div>
-                          <span>Slug</span>
-                          <strong>{selectedItem.slug || "Auto-generated from title"}</strong>
-                        </div>
-                      )}
-                    </div>
-                  </aside>
+                </>
+              ) : (
+                <div className="editor-empty">
+                  <Sparkles size={24} />
+                  <h2>No items yet</h2>
+                  <p>Create the first {activeTab === "news" ? "story" : "gallery image"} to begin populating the site.</p>
+                  <button
+                    className="btn primary admin-btn"
+                    type="button"
+                    onClick={() => addCollectionItem(activeTab, activeTab === "news" ? blankNewsItem : blankGalleryItem)}
+                  >
+                    {activeTab === "news" ? "Add Story" : "Add Image"}
+                  </button>
                 </div>
-              </>
-            ) : (
-              <div className="editor-empty">
-                <Sparkles size={24} />
-                <h2>No items yet</h2>
-                <p>Create the first {activeTab === "news" ? "story" : "gallery image"} to begin populating the site.</p>
-                <button
-                  className="btn primary admin-btn"
-                  type="button"
-                  onClick={() => addCollectionItem(activeTab, activeTab === "news" ? blankNewsItem : blankGalleryItem)}
-                >
-                  {activeTab === "news" ? "Add Story" : "Add Image"}
-                </button>
-              </div>
-            )}
+              )}
+            </div>
           </div>
-        </div>
+        )}
       </div>
     </section>
   );

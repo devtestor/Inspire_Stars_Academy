@@ -14,13 +14,16 @@ import {
   Timeline,
   TrainingCenters,
 } from "@/components/HomeSections";
+import { getCmsSettings } from "@/lib/cms";
 
 export const revalidate = 60;
 
-export default function HomePage() {
+export default async function HomePage() {
+  const settings = await getCmsSettings();
+
   return (
     <main>
-      <Hero />
+      <Hero settings={settings} />
       <Impact />
       <Timeline />
       <SportsCarousel />
@@ -33,7 +36,7 @@ export default function HomePage() {
       <PeopleCommunity />
       <Sponsorship />
       <PartnersNewsInstagram />
-      <FinalCTA />
+      <FinalCTA settings={settings} />
     </main>
   );
 }

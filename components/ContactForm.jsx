@@ -4,15 +4,16 @@ import { useState } from "react";
 import { ArrowRight } from "lucide-react";
 
 const initialState = {
-  intent: "Join the Academy",
+  intent: "",
   name: "",
   email: "",
   phone: "",
   message: "",
 };
 
-export default function ContactForm({ defaultIntent = "Join the Academy" }) {
-  const [form, setForm] = useState({ ...initialState, intent: defaultIntent });
+export default function ContactForm({ defaultIntent = "Join the Academy", options = [] }) {
+  const requestOptions = options.length ? options : ["Join the Academy"];
+  const [form, setForm] = useState({ ...initialState, intent: defaultIntent || requestOptions[0] });
   const [status, setStatus] = useState("idle");
   const [notice, setNotice] = useState("");
 
@@ -41,7 +42,7 @@ export default function ContactForm({ defaultIntent = "Join the Academy" }) {
 
       setStatus("success");
       setNotice("Message received. The academy team can follow up from here.");
-      setForm({ ...initialState, intent: defaultIntent });
+      setForm({ ...initialState, intent: defaultIntent || requestOptions[0] });
     } catch {
       setStatus("error");
       setNotice("The contact service is temporarily unavailable.");
@@ -53,11 +54,9 @@ export default function ContactForm({ defaultIntent = "Join the Academy" }) {
       <label className="field">
         <span>Request type</span>
         <select name="intent" value={form.intent} onChange={update}>
-          <option>Join the Academy</option>
-          <option>Partner With Us</option>
-          <option>School Partnership</option>
-          <option>Sponsor Support</option>
-          <option>International Opportunity</option>
+          {requestOptions.map((option) => (
+            <option key={option}>{option}</option>
+          ))}
         </select>
       </label>
       <label className="field">

@@ -13,11 +13,16 @@ import {
   sports,
   timeline,
 } from "@/content/siteContent";
-import { getPublishedGallery, getPublishedNews } from "@/lib/cms";
+import { getCmsSettings, getPublishedGallery, getPublishedNews } from "@/lib/cms";
 
 export async function GET() {
+  const settings = await getCmsSettings();
+
   return Response.json({
-    site,
+    site: {
+      ...site,
+      ...settings.site,
+    },
     navItems,
     impactStats,
     timeline,
@@ -31,6 +36,7 @@ export async function GET() {
     newsCards,
     programs,
     cms: {
+      settings,
       news: await getPublishedNews(),
       gallery: await getPublishedGallery(),
     },

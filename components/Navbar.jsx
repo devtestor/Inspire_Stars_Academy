@@ -10,6 +10,7 @@ export default function Navbar() {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [siteSettings, setSiteSettings] = useState(site);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 28);
@@ -18,11 +19,32 @@ export default function Navbar() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  useEffect(() => {
+    let mounted = true;
+
+    const loadSettings = async () => {
+      try {
+        const response = await fetch("/api/content", { cache: "force-cache" });
+        const result = await response.json();
+        if (mounted && result?.site) {
+          setSiteSettings((current) => ({ ...current, ...result.site }));
+        }
+      } catch {
+        // Keep static fallback values when the public API is unavailable.
+      }
+    };
+
+    loadSettings();
+    return () => {
+      mounted = false;
+    };
+  }, []);
+
   const close = () => setOpen(false);
 
   return (
     <header className={`navbar ${scrolled ? "is-scrolled" : ""} ${open ? "menu-open" : ""}`}>
-      <Link className="brand-mark" href="/" onClick={close} aria-label={`${site.name} home`}>
+      <Link className="brand-mark" href="/" onClick={close} aria-label={`${siteSettings.name} home`}>
         <img src={images.logo} alt="" />
         <span>Inspire Stars Academy</span>
       </Link>
@@ -34,11 +56,11 @@ export default function Navbar() {
         ))}
       </nav>
       <div className="nav-actions">
-        <a className="icon-link" href={site.instagram} target="_blank" rel="noreferrer" aria-label="Open Instagram">
+        <a className="icon-link" href={siteSettings.instagram} target="_blank" rel="noreferrer" aria-label="Open Instagram">
           <Instagram size={19} />
         </a>
         <Link className="nav-cta" href="/contact">
-          Join the Academy
+          {siteSettings.joinCtaLabel || "Join the Academy"}
         </Link>
         <button className="menu-button" type="button" aria-label={open ? "Close menu" : "Open menu"} aria-expanded={open} onClick={() => setOpen((value) => !value)}>
           {open ? <X size={25} /> : <Menu size={25} />}
@@ -51,11 +73,11 @@ export default function Navbar() {
               {label}
             </Link>
           ))}
-          <a href={site.instagram} target="_blank" rel="noreferrer" onClick={close}>
+          <a href={siteSettings.instagram} target="_blank" rel="noreferrer" onClick={close}>
             Instagram <ExternalLink size={18} />
           </a>
           <Link className="mobile-cta" href="/contact" onClick={close}>
-            Join the Academy
+            {siteSettings.joinCtaLabel || "Join the Academy"}
           </Link>
         </div>
       </div>

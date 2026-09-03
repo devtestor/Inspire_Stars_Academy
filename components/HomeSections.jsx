@@ -16,24 +16,24 @@ import {
 } from "@/content/siteContent";
 import SplitHeading from "./SplitHeading";
 import SportsCarousel from "./SportsCarousel";
-import { getPublishedGallery, getPublishedNews } from "@/lib/cms";
+import { getCmsSettings, getPublishedGallery, getPublishedNews } from "@/lib/cms";
 
-export function Hero() {
+export function Hero({ settings }) {
   return (
     <section className="hero" id="home">
       <img className="hero-bg" src={images.hero} alt="Inspire Stars Academy athletes during international exposure travel" />
       <div className="hero-film" />
       <div className="hero-grid" aria-hidden="true" />
       <div className="hero-content">
-        <p className="location"><MapPin size={16} /> Kigali • Rwanda</p>
+        <p className="location"><MapPin size={16} /> {settings.hero.locationLabel}</p>
         <h1>
-          From<br />
-          Rwanda <span>to the<br />World.</span>
+          {settings.hero.titleLineOne}<br />
+          {settings.hero.titleLineTwo} <span>{settings.hero.accentLine}<br />{settings.hero.titleLineThree}</span>
         </h1>
-        <p>Developing young athletes through sport, education, discipline and global opportunity.</p>
+        <p>{settings.hero.body}</p>
         <div className="hero-actions">
-          <Link className="btn primary" href="/academy">Explore the Academy <ArrowRight size={18} /></Link>
-          <Link className="btn secondary" href="/contact">Start Your Journey</Link>
+          <Link className="btn primary" href={settings.hero.primaryCtaHref}>{settings.hero.primaryCtaLabel} <ArrowRight size={18} /></Link>
+          <Link className="btn secondary" href={settings.hero.secondaryCtaHref}>{settings.hero.secondaryCtaLabel}</Link>
         </div>
       </div>
       <div className="scroll-cue">Scroll to discover</div>
@@ -257,7 +257,7 @@ export function Sponsorship() {
 }
 
 export async function PartnersNewsInstagram() {
-  const [cmsPosts, galleryImages] = await Promise.all([getPublishedNews(), getPublishedGallery()]);
+  const [cmsPosts, galleryImages, settings] = await Promise.all([getPublishedNews(), getPublishedGallery(), getCmsSettings()]);
   const displayedNews = cmsPosts.length ? cmsPosts.slice(0, 3) : newsCards.map(([title, body, image]) => ({ title, excerpt: body, category: title, image, alt: `${title} at Inspire Stars Academy` }));
   const displayedGallery = galleryImages.length ? galleryImages : [images.football, images.trophy, images.award, images.certificate, images.hero, images.school].map((image) => ({ image, alt: "Inspire Stars Academy social media moment" }));
 
@@ -297,7 +297,7 @@ export async function PartnersNewsInstagram() {
             <img src={photo.image} alt={photo.alt || photo.title || "Inspire Stars Academy social media moment"} loading="lazy" key={photo._id || `${photo.image}-${index}`} />
           ))}
         </div>
-        <a className="btn primary" href={site.instagram} target="_blank" rel="noreferrer">
+        <a className="btn primary" href={settings.site.instagram} target="_blank" rel="noreferrer">
           <Instagram size={18} /> Follow @inspirestarsacademy
         </a>
       </div>
@@ -305,17 +305,18 @@ export async function PartnersNewsInstagram() {
   );
 }
 
-export function FinalCTA() {
+export function FinalCTA({ settings }) {
   return (
     <section className="final-cta" id="contact">
-      <p className="eyebrow">From Rwanda to the World.</p>
+      <p className="eyebrow">{settings.finalCta.eyebrow}</p>
       <h2>
-        Your Journey <span>Starts Here.</span>
+        {settings.finalCta.title} <span>{settings.finalCta.accent}</span>
       </h2>
+      <p className="final-cta-copy">{settings.finalCta.body}</p>
       <div>
-        <Link className="btn primary" href="/contact">Join the Academy</Link>
-        <Link className="btn secondary" href="/partners">Partner With Us</Link>
-        <a className="btn secondary" href={`tel:${site.phone.replaceAll(" ", "")}`}>Contact the Academy</a>
+        <Link className="btn primary" href={settings.finalCta.primaryHref}>{settings.finalCta.primaryLabel}</Link>
+        <Link className="btn secondary" href={settings.finalCta.secondaryHref}>{settings.finalCta.secondaryLabel}</Link>
+        <a className="btn secondary" href={settings.finalCta.tertiaryHref}>{settings.finalCta.tertiaryLabel}</a>
       </div>
     </section>
   );

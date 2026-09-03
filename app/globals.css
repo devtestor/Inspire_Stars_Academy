@@ -988,6 +988,13 @@ h3 {
   margin-top: 28px;
 }
 
+.final-cta-copy {
+  max-width: 720px;
+  margin: 0;
+  color: var(--text-muted);
+  font-size: 1.04rem;
+}
+
 .benefit-grid,
 .partner-grid {
   display: grid;
@@ -1799,9 +1806,24 @@ h3 {
   align-items: start;
 }
 
+.admin-site-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+  align-items: start;
+}
+
 .admin-sidebar,
 .editor-panel {
   padding: 20px;
+}
+
+.site-panel {
+  min-height: 100%;
+}
+
+.site-panel .editor-header svg {
+  color: var(--gold);
 }
 
 .sidebar-header,
@@ -2238,6 +2260,7 @@ h3 {
   .feature-story,
   .admin-metrics,
   .admin-overview,
+  .admin-site-grid,
   .admin-workspace,
   .editor-layout {
     grid-template-columns: 1fr;
