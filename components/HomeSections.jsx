@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowRight, Building2, Download, Instagram, MapPin, Play, Shield } from "lucide-react";
+import { ArrowRight, Building2, Download, GraduationCap, HeartHandshake, Instagram, MapPin, Play, Shield, Target } from "lucide-react";
 import {
   academyHighlights,
   athleteStories,
@@ -42,32 +42,85 @@ export function Hero({ settings }) {
 }
 
 export function Impact() {
+  const impactSignals = [
+    {
+      title: "Coaching with intent",
+      body: "Sessions are built around technical growth, discipline and competitive readiness.",
+      icon: Target,
+    },
+    {
+      title: "Education stays central",
+      body: "Development stays connected to school progress, mentorship and long-term opportunity.",
+      icon: GraduationCap,
+    },
+    {
+      title: "Support beyond sport",
+      body: "Families, inclusion and welfare support strengthen the full athlete journey.",
+      icon: HeartHandshake,
+    },
+  ];
+
   return (
     <section className="impact" id="academy">
-      <div className="impact-statement" data-reveal>
-        <p className="eyebrow dark">Athlete Development Ecosystem</p>
-        <h2>
-          We develop athletes. <span>We develop people.</span>
-        </h2>
+      <div className="impact-intro" data-reveal>
+        <div className="impact-statement">
+          <p className="eyebrow dark">Athlete Development Ecosystem</p>
+          <h2>
+            We develop athletes. <span>We develop people.</span>
+          </h2>
+        </div>
+        <div className="impact-aside">
+          <p className="impact-copy">
+            Through professional coaching, education, competition and mentorship, Inspire Stars Academy creates an environment where young people discover potential and prepare for opportunities beyond the field.
+          </p>
+          <div className="impact-seal">
+            <img src={images.school} alt="Inspire Stars Academy student athlete session" loading="lazy" />
+            <div>
+              <span>From potential to performance</span>
+              <strong>Kigali-based development with global ambition.</strong>
+            </div>
+          </div>
+        </div>
       </div>
-      <p className="impact-copy" data-reveal>
-        Through professional coaching, education, competition and mentorship, Inspire Stars Academy creates an environment where young people discover potential and prepare for opportunities beyond the field.
-      </p>
-      <div className="impact-stats">
+      <div className="impact-stats" data-reveal>
         {impactStats.map((stat) => (
-          <div className="stat-block" key={stat.label} data-reveal>
+          <div className="stat-block" key={stat.label}>
+            <p>Impact</p>
             <strong>{stat.value}</strong>
             <span>{stat.label}</span>
           </div>
         ))}
       </div>
       <div className="impact-highlights">
-        {academyHighlights.map(([title, body]) => (
-          <article key={title} data-reveal>
-            <h3>{title}</h3>
-            <p>{body}</p>
-          </article>
-        ))}
+        {academyHighlights.map(([title, body], index) => {
+          const SignalIcon = impactSignals[index]?.icon || Shield;
+
+          return (
+            <article key={title} data-reveal>
+              <div className="impact-card-top">
+                <span>{`0${index + 1}`}</span>
+                <SignalIcon size={20} />
+              </div>
+              <h3>{title}</h3>
+              <p>{body}</p>
+            </article>
+          );
+        })}
+      </div>
+      <div className="impact-band" data-reveal>
+        {impactSignals.map((signal) => {
+          const Icon = signal.icon;
+
+          return (
+            <article key={signal.title}>
+              <Icon size={18} />
+              <div>
+                <h3>{signal.title}</h3>
+                <p>{signal.body}</p>
+              </div>
+            </article>
+          );
+        })}
       </div>
     </section>
   );
