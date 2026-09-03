@@ -3,7 +3,7 @@
   --black: #081523;
   --carbon: #0f2236;
   --white: #ffffff;
-  --soft-white: #f3f6fa;
+  --soft-white: #eaf1f8;
   --text-muted: rgba(255, 255, 255, 0.68);
   --ink-muted: rgba(8, 21, 35, 0.68);
   --line-dark: rgba(255, 255, 255, 0.16);
@@ -11,6 +11,8 @@
   --gold: #0053bc;
   --gold-deep: #002b5e;
   --gold-soft: #b8c4ca;
+  --panel-blue: #f4f8fc;
+  --panel-blue-strong: #dde8f4;
   --display: var(--font-display), "Arial Narrow", "Helvetica Neue Condensed", sans-serif;
   --ui: var(--font-ui), "Segoe UI", Arial, sans-serif;
   --shadow: 0 28px 90px rgba(0, 0, 0, 0.34);
@@ -81,7 +83,7 @@ a {
 .navbar.is-scrolled,
 .navbar.menu-open {
   border-bottom: 1px solid var(--line-dark);
-  background: rgba(5, 5, 7, 0.9);
+  background: rgba(6, 17, 29, 0.92);
   backdrop-filter: blur(20px);
 }
 
@@ -538,7 +540,7 @@ h1 span {
   gap: 18px;
   padding: 28px;
   border: 1px solid rgba(0, 43, 94, 0.16);
-  background: linear-gradient(180deg, rgba(255, 255, 255, 1), rgba(250, 246, 238, 0.92));
+  background: linear-gradient(180deg, var(--white), var(--panel-blue));
   box-shadow: 0 18px 38px rgba(8, 16, 32, 0.06);
 }
 
@@ -579,7 +581,7 @@ h1 span {
   min-height: 190px;
   padding: 24px;
   border: 1px solid rgba(0, 43, 94, 0.14);
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(250, 246, 238, 0.92));
+  background: linear-gradient(180deg, var(--white), var(--panel-blue));
   box-shadow: 0 18px 38px rgba(8, 16, 32, 0.05);
 }
 
@@ -604,7 +606,7 @@ h1 span {
 }
 
 .journey {
-  background: var(--white);
+  background: var(--soft-white);
   color: var(--obsidian);
 }
 
@@ -623,6 +625,7 @@ h1 span {
   min-height: 330px;
   padding: 28px 22px;
   border-right: 1px solid var(--line-light);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.54), rgba(221, 232, 244, 0.52));
 }
 
 .timeline-card:first-child {
@@ -1307,8 +1310,8 @@ h3 {
 
 .page-hero-film {
   background:
-    linear-gradient(90deg, rgba(5, 5, 7, 0.94), rgba(5, 5, 7, 0.58) 58%, rgba(0, 83, 188, 0.14)),
-    linear-gradient(0deg, rgba(5, 5, 7, 0.9), transparent 48%);
+    linear-gradient(90deg, rgba(6, 17, 29, 0.95), rgba(6, 17, 29, 0.62) 58%, rgba(0, 83, 188, 0.18)),
+    linear-gradient(0deg, rgba(6, 17, 29, 0.9), transparent 48%);
 }
 
 .page-hero-content {
@@ -1356,7 +1359,7 @@ h3 {
 .scout-grid article {
   min-height: 240px;
   padding: 28px;
-  background: var(--white);
+  background: linear-gradient(180deg, var(--white), var(--panel-blue));
   box-shadow: 0 18px 40px rgba(8, 16, 32, 0.06);
 }
 
@@ -1444,7 +1447,7 @@ h3 {
   gap: 14px;
   padding: clamp(18px, 3vw, 32px);
   border: 1px solid var(--line-light);
-  background: var(--white);
+  background: linear-gradient(180deg, var(--white), var(--panel-blue));
   box-shadow: var(--shadow);
 }
 
@@ -1489,7 +1492,7 @@ h3 {
   align-items: start;
   padding: 14px 16px;
   border: 1px solid var(--line-light);
-  background: var(--white);
+  background: linear-gradient(180deg, var(--white), var(--panel-blue));
 }
 
 .join-signal-list svg {
@@ -1508,7 +1511,7 @@ h3 {
   padding: clamp(18px, 3vw, 32px);
   border: 1px solid rgba(0, 43, 94, 0.18);
   background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(250, 247, 240, 0.94)),
+    linear-gradient(180deg, var(--white), var(--panel-blue)),
     var(--white);
   box-shadow: var(--shadow);
 }
