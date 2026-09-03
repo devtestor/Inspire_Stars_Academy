@@ -1,6 +1,23 @@
+import localFont from "next/font/local";
 import AppShell from "@/components/AppShell";
 import { site } from "@/content/siteContent";
 import "./globals.css";
+
+const displayFont = localFont({
+  src: "../public/fonts/anton-400.ttf",
+  variable: "--font-display",
+  display: "swap",
+});
+
+const uiFont = localFont({
+  src: [
+    { path: "../public/fonts/inter-400.ttf", weight: "400", style: "normal" },
+    { path: "../public/fonts/inter-700.ttf", weight: "700", style: "normal" },
+    { path: "../public/fonts/inter-900.ttf", weight: "900", style: "normal" },
+  ],
+  variable: "--font-ui",
+  display: "swap",
+});
 
 export const metadata = {
   metadataBase: new URL(site.url),
@@ -53,7 +70,7 @@ export default function RootLayout({ children }) {
 
   return (
     <html lang="en">
-      <body>
+      <body className={`${displayFont.variable} ${uiFont.variable}`}>
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }} />
         <AppShell>{children}</AppShell>
       </body>

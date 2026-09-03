@@ -11,8 +11,8 @@
   --gold: #d8aa52;
   --gold-deep: #b98938;
   --gold-soft: #efd398;
-  --display: Impact, "Arial Narrow", "Helvetica Neue Condensed", sans-serif;
-  --ui: Inter, Manrope, "Segoe UI", Arial, sans-serif;
+  --display: var(--font-display), "Arial Narrow", "Helvetica Neue Condensed", sans-serif;
+  --ui: var(--font-ui), "Segoe UI", Arial, sans-serif;
   --shadow: 0 28px 90px rgba(0, 0, 0, 0.34);
 }
 
